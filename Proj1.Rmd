@@ -188,7 +188,7 @@ Now that we have our data, it is time to make use of that data. In this section,
 
 Suppose we believe that Los Angeles is the country with the most wins. We can investigate this idea using our data. Let us start with the franchise data table. We can see that the data involves a span of 100 years(1917 to 2017). Lets investigate whether the amount of games played every 50 years starting from year 1917 increased or decreased.
 
-```{r}
+```{r hist}
 # We can access this data using our get_fran function
 fran <- get_fran(tab_name = "franchise")
 
@@ -205,7 +205,7 @@ From the plot above, we see that more games were played during 1968 - 2017 and l
 
 
 
-```{r, message=FALSE}
+```{r, scatter_plot,  message=FALSE}
 
 #Join by franchiseId so that totalGames column is included
 d <- get_fran_tot(tab_name = "franchise-team-totals", ID=14)
@@ -228,7 +228,7 @@ g+geom_point()+ylab("Total Games Played")+xlab("Franchise Year")+
 ```
 From the scatterplots above we can infer that there is no linear relationship between the year and the number of games played. This could be because the games where played by teams who were not active. It is somewhat intuitive that there is no relationship between the two variables because some teams stopped playing as the year passed by. Lets investigate this hypothesis with the use of a boxplot. 
 
-```{r }
+```{r box_plot}
 rangers <- get_fran_tot(tab_name = "franchise-team-totals", ID=14)
 
 #Now lets check which is the winning team, we will investigate the team whose wins are greater than losses.
@@ -245,7 +245,7 @@ g+geom_boxplot(aes(y=data.gamesPlayed,fill=active))+theme(legend.position="none"
  
 With this boxplot, we can see that the teams that were active played a higher number of games than teams that were not active. Recall that were are interested in the total number of games played by the rangers team. Lets investigate this further by creating a contingency table of the wins and losses by a Los Angeles team in 1967.
 
-```{r }
+```{r bar_pl}
 
 #Lets visualize the teams active.
 ggplot(rangers, aes(x=active)) + geom_bar(colour = "red") + xlab("Number of teams active")
@@ -260,7 +260,7 @@ knitr::kable(tbl)
 
 From above, we see that more teams are active , we see that we have a couple of teams who won a game atleast twice. Lets investigate this further by looking at teams who are active and won a game atleast twice.
 
-```{r}
+```{r cont_tbl}
 # Lets investigate the winning teams that are active  
 
 rangers2 <- rangers %>% mutate(active=is.na(data.lastSeasonId)) %>% group_by(data.teamName)
@@ -278,7 +278,7 @@ stats
 ```
 
 Alternatively, we can create boxplots;
-```{r}
+```{r bplot}
 g<-ggplot(rangers2,aes(x=active))
 g+geom_boxplot(aes(y=data.gamesPlayed,fill=active))+theme(legend.position="none")+xlab("Is Franchise Still Active?")+
   ylab("Total Games Played")+labs(title="Total Games by Active Status")+scale_x_discrete(labels=c("No","Yes"))

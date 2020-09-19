@@ -77,7 +77,7 @@ get_fran_tot <- function(tab_name, ID){
 
 ``` r
 get_fran_rec <- function(tab_name, ID){
-    if (is.null(ID)){
+  if (is.null(ID)){
     stop("Need a valid franchise ID")
   }
   base_url <- "https://records.nhl.com/site/api"
@@ -93,7 +93,7 @@ get_fran_rec <- function(tab_name, ID){
 
 ``` r
 get_goalie <- function(tab_name, ID){
-    if (is.null(ID)){
+  if (is.null(ID)){
     stop("Need a valid franchise ID")
   }
   base_url <- "https://records.nhl.com/site/api"
@@ -109,7 +109,7 @@ get_goalie <- function(tab_name, ID){
 
 ``` r
 get_skater <- function(tab_name, ID){
-    if (is.null(ID)){
+  if (is.null(ID)){
     stop("Need a valid franchise ID")
   }
   base_url <- "https://records.nhl.com/site/api"
@@ -187,7 +187,7 @@ if(is.null(endpoint)){stop("Need valid endpoint")}
 ## Exploratory Data Analysis.
 
 Now that we have our data, it is time to make use of that data. In this
-section we will explore our data using the following steps;
+section, we will explore our data using plots and summaries.
 
 Suppose we believe that Los Angeles is the country with the most wins.
 We can investigate this idea using our data. Let us start with the
@@ -203,32 +203,27 @@ fran <- get_fran(tab_name = "franchise")
     ## No encoding supplied: defaulting to UTF-8.
 
 ``` r
-# Let us visualize the 
-
 # Now lets perform the necessary transformation and visualize the data
 teamData <- separate(fran,data.firstSeasonId,into=c("startYear","Quarter"),sep=4)
 teamData <- teamData %>% mutate(Year = "NA") 
 teamData$Year <- ifelse(teamData$startYear <= 1967, 1,0)
 teamData$Year <- as.factor(teamData$Year)
 g <- ggplot(teamData, aes(x = as.numeric(startYear)))
-g+geom_histogram(aes(fill = Year), position = "dodge") +xlab("Franchise Start Year") +scale_fill_discrete(labels = c("1968-2017", "1917-1967")) +labs(title = "Histogram of Start Year")
+g+geom_histogram(aes(fill = Year), position = "dodge") +xlab("Franchise Start Year") +scale_fill_discrete(labels = c("1968-2017", "1917-1967"))   +labs(title = "Histogram of Start Year")
 ```
 
-    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+    ## `stat_bin()` using `bins = 30`. Pick better
+    ## value with `binwidth`.
 
-![](README_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
 From the plot above, we see that more games were played during 1968 -
-2017 and less games were played during 1917-1967.
+2017 and less games were played during 1917-1967. Now, lets investigate
+the relationship between year and number of games played.
 
 ``` r
 #Join by franchiseId so that totalGames column is included
 d <- get_fran_tot(tab_name = "franchise-team-totals", ID=14)
-```
-
-    ## No encoding supplied: defaulting to UTF-8.
-
-``` r
 e<-d %>% inner_join(teamData, by = "data.id")
 
 #create scatter plot of franchise year vs.total games played
@@ -239,9 +234,7 @@ g+geom_point()+ylab("Total Games Played")+xlab("Franchise Year")+
   ggtitle("Total Games Played by Franchise Year")
 ```
 
-    ## `geom_smooth()` using formula 'y ~ x'
-
-![](README_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 ``` r
 z <- filter(e, startYear %in% (1968:2017),data.gamesPlayed > 2000)
@@ -252,9 +245,7 @@ g+geom_point()+ylab("Total Games Played")+xlab("Franchise Year")+
   ggtitle("Total Games Played by Franchise Year")
 ```
 
-    ## `geom_smooth()` using formula 'y ~ x'
-
-![](README_files/figure-gfm/unnamed-chunk-5-2.png)<!-- --> From the
+![](README_files/figure-gfm/unnamed-chunk-6-2.png)<!-- --> From the
 scatterplots above we can infer that there is no linear relationship
 between the year and the number of games played. This could be because
 the games where played by teams who were not active. It is somewhat
@@ -279,7 +270,7 @@ g+geom_boxplot(aes(y=data.gamesPlayed,fill=active))+theme(legend.position="none"
   ylab("Total Games Played")+labs(title="Total Games by Active Status")+scale_x_discrete(labels=c("No","Yes"))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
 With this boxplot, we can see that the teams that were active played a
 higher number of games than teams that were not active. Recall that were
@@ -292,7 +283,7 @@ wins and losses by a Los Angeles team in 1967.
 ggplot(rangers, aes(x=active)) + geom_bar(colour = "red") + xlab("Number of teams active")
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
 ``` r
 #Let us create a contingency table of the Wins and losses of each team.
@@ -450,19 +441,20 @@ stats
 
     ## # A tibble: 57 x 5
     ## # Groups:   active [2]
-    ##    active data.teamName       averageGames medGame maxGame
-    ##    <lgl>  <chr>                      <dbl>   <dbl>   <int>
-    ##  1 TRUE   Montréal Canadiens         3745    3745     6731
-    ##  2 TRUE   Boston Bruins              3617    3617     6570
-    ##  3 TRUE   Chicago Blackhawks         3526    3526     6504
-    ##  4 TRUE   New York Rangers           3511    3511     6504
-    ##  5 TRUE   Toronto Maple Leafs        3499    3499     6460
-    ##  6 TRUE   Detroit Red Wings          3428.   3428.    6237
-    ##  7 TRUE   St. Louis Blues            2258.   2258.    4117
-    ##  8 TRUE   Los Angeles Kings          2186.   2186.    4116
-    ##  9 TRUE   Philadelphia Flyers        2282    2282     4115
-    ## 10 TRUE   Pittsburgh Penguins        2250    2250     4115
-    ## # … with 47 more rows
+    ##    active data.teamName averageGames medGame
+    ##    <lgl>  <chr>                <dbl>   <dbl>
+    ##  1 TRUE   Montréal Can…        3745    3745 
+    ##  2 TRUE   Boston Bruins        3617    3617 
+    ##  3 TRUE   Chicago Blac…        3526    3526 
+    ##  4 TRUE   New York Ran…        3511    3511 
+    ##  5 TRUE   Toronto Mapl…        3499    3499 
+    ##  6 TRUE   Detroit Red …        3428.   3428.
+    ##  7 TRUE   St. Louis Bl…        2258.   2258.
+    ##  8 TRUE   Los Angeles …        2186.   2186.
+    ##  9 TRUE   Philadelphia…        2282    2282 
+    ## 10 TRUE   Pittsburgh P…        2250    2250 
+    ## # … with 47 more rows, and 1 more variable:
+    ## #   maxGame <int>
 
 Alternatively, we can create boxplots;
 
@@ -472,6 +464,6 @@ g+geom_boxplot(aes(y=data.gamesPlayed,fill=active))+theme(legend.position="none"
   ylab("Total Games Played")+labs(title="Total Games by Active Status")+scale_x_discrete(labels=c("No","Yes"))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-10-1.png)<!-- --> Based on the
+![](README_files/figure-gfm/unnamed-chunk-11-1.png)<!-- --> Based on the
 quantitative summaries, we see that Montreal Canadiens from the rangers
 played the most games.

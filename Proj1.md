@@ -220,7 +220,7 @@ g+geom_histogram(aes(fill = Year), position = "dodge") +xlab("Franchise Start Ye
 
     ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
-![](Proj1_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+![](Proj1_files/figure-gfm/hist-1.png)<!-- -->
 
 From the plot above, we see that more games were played during 1968 -
 2017 and less games were played during 1917-1967. Now, lets investigate
@@ -239,7 +239,7 @@ g+geom_point()+ylab("Total Games Played")+xlab("Franchise Year")+
   ggtitle("Total Games Played by Franchise Year")
 ```
 
-![](Proj1_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+![](Proj1_files/figure-gfm/scatter_plot-1.png)<!-- -->
 
 ``` r
 z <- filter(e, startYear %in% (1968:2017),data.gamesPlayed > 2000)
@@ -250,7 +250,7 @@ g+geom_point()+ylab("Total Games Played")+xlab("Franchise Year")+
   ggtitle("Total Games Played by Franchise Year")
 ```
 
-![](Proj1_files/figure-gfm/unnamed-chunk-5-2.png)<!-- --> From the
+![](Proj1_files/figure-gfm/scatter_plot-2.png)<!-- --> From the
 scatterplots above we can infer that there is no linear relationship
 between the year and the number of games played. This could be because
 the games where played by teams who were not active. It is somewhat
@@ -275,7 +275,7 @@ g+geom_boxplot(aes(y=data.gamesPlayed,fill=active))+theme(legend.position="none"
   ylab("Total Games Played")+labs(title="Total Games by Active Status")+scale_x_discrete(labels=c("No","Yes"))
 ```
 
-![](Proj1_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](Proj1_files/figure-gfm/box_plot-1.png)<!-- -->
 
 With this boxplot, we can see that the teams that were active played a
 higher number of games than teams that were not active. Recall that were
@@ -288,7 +288,7 @@ wins and losses by a Los Angeles team in 1967.
 ggplot(rangers, aes(x=active)) + geom_bar(colour = "red") + xlab("Number of teams active")
 ```
 
-![](Proj1_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](Proj1_files/figure-gfm/bar_pl-1.png)<!-- -->
 
 ``` r
 #Let us create a contingency table of the Wins and losses of each team.
@@ -468,6 +468,6 @@ g+geom_boxplot(aes(y=data.gamesPlayed,fill=active))+theme(legend.position="none"
   ylab("Total Games Played")+labs(title="Total Games by Active Status")+scale_x_discrete(labels=c("No","Yes"))
 ```
 
-![](Proj1_files/figure-gfm/unnamed-chunk-10-1.png)<!-- --> Based on the
+![](Proj1_files/figure-gfm/bplot-1.png)<!-- --> Based on the
 quantitative summaries, we see that Montreal Canadiens from the rangers
 played the most games.
