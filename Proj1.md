@@ -83,7 +83,7 @@ get_fran_tot <- function(tab_name, ID){
 
 ``` r
 get_fran_rec <- function(tab_name, ID){
-    if (is.null(ID)){
+  if (is.null(ID)){
     stop("Need a valid franchise ID")
   }
   base_url <- "https://records.nhl.com/site/api"
@@ -99,7 +99,7 @@ get_fran_rec <- function(tab_name, ID){
 
 ``` r
 get_goalie <- function(tab_name, ID){
-    if (is.null(ID)){
+  if (is.null(ID)){
     stop("Need a valid franchise ID")
   }
   base_url <- "https://records.nhl.com/site/api"
@@ -115,7 +115,7 @@ get_goalie <- function(tab_name, ID){
 
 ``` r
 get_skater <- function(tab_name, ID){
-    if (is.null(ID)){
+  if (is.null(ID)){
     stop("Need a valid franchise ID")
   }
   base_url <- "https://records.nhl.com/site/api"
@@ -193,7 +193,7 @@ if(is.null(endpoint)){stop("Need valid endpoint")}
 ## Exploratory Data Analysis.
 
 Now that we have our data, it is time to make use of that data. In this
-section we will explore our data using the following steps;
+section, we will explore our data using plots and summaries.
 
 Suppose we believe that Los Angeles is the country with the most wins.
 We can investigate this idea using our data. Let us start with the
@@ -209,15 +209,13 @@ fran <- get_fran(tab_name = "franchise")
     ## No encoding supplied: defaulting to UTF-8.
 
 ``` r
-# Let us visualize the 
-
 # Now lets perform the necessary transformation and visualize the data
 teamData <- separate(fran,data.firstSeasonId,into=c("startYear","Quarter"),sep=4)
 teamData <- teamData %>% mutate(Year = "NA") 
 teamData$Year <- ifelse(teamData$startYear <= 1967, 1,0)
 teamData$Year <- as.factor(teamData$Year)
 g <- ggplot(teamData, aes(x = as.numeric(startYear)))
-g+geom_histogram(aes(fill = Year), position = "dodge") +xlab("Franchise Start Year") +scale_fill_discrete(labels = c("1968-2017", "1917-1967")) +labs(title = "Histogram of Start Year")
+g+geom_histogram(aes(fill = Year), position = "dodge") +xlab("Franchise Start Year") +scale_fill_discrete(labels = c("1968-2017", "1917-1967"))   +labs(title = "Histogram of Start Year")
 ```
 
     ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
@@ -225,16 +223,12 @@ g+geom_histogram(aes(fill = Year), position = "dodge") +xlab("Franchise Start Ye
 ![](Proj1_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
 From the plot above, we see that more games were played during 1968 -
-2017 and less games were played during 1917-1967.
+2017 and less games were played during 1917-1967. Now, lets investigate
+the relationship between year and number of games played.
 
 ``` r
 #Join by franchiseId so that totalGames column is included
 d <- get_fran_tot(tab_name = "franchise-team-totals", ID=14)
-```
-
-    ## No encoding supplied: defaulting to UTF-8.
-
-``` r
 e<-d %>% inner_join(teamData, by = "data.id")
 
 #create scatter plot of franchise year vs.total games played
@@ -244,8 +238,6 @@ g+geom_point()+ylab("Total Games Played")+xlab("Franchise Year")+
   geom_smooth(method=lm, col="Green") + 
   ggtitle("Total Games Played by Franchise Year")
 ```
-
-    ## `geom_smooth()` using formula 'y ~ x'
 
 ![](Proj1_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
@@ -257,8 +249,6 @@ g+geom_point()+ylab("Total Games Played")+xlab("Franchise Year")+
   geom_smooth(method=lm, col="Green") + 
   ggtitle("Total Games Played by Franchise Year")
 ```
-
-    ## `geom_smooth()` using formula 'y ~ x'
 
 ![](Proj1_files/figure-gfm/unnamed-chunk-5-2.png)<!-- --> From the
 scatterplots above we can infer that there is no linear relationship

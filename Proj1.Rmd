@@ -74,7 +74,7 @@ get_fran_tot <- function(tab_name, ID){
 
 ```{r }
 get_fran_rec <- function(tab_name, ID){
-    if (is.null(ID)){
+  if (is.null(ID)){
     stop("Need a valid franchise ID")
   }
   base_url <- "https://records.nhl.com/site/api"
@@ -91,7 +91,7 @@ get_fran_rec <- function(tab_name, ID){
 
 ```{r }
 get_goalie <- function(tab_name, ID){
-    if (is.null(ID)){
+  if (is.null(ID)){
     stop("Need a valid franchise ID")
   }
   base_url <- "https://records.nhl.com/site/api"
@@ -107,7 +107,7 @@ get_goalie <- function(tab_name, ID){
 
 ```{r }
 get_skater <- function(tab_name, ID){
-    if (is.null(ID)){
+  if (is.null(ID)){
     stop("Need a valid franchise ID")
   }
   base_url <- "https://records.nhl.com/site/api"
@@ -183,7 +183,7 @@ if(is.null(endpoint)){stop("Need valid endpoint")}
 ```
    
 ## Exploratory Data Analysis.
-Now that we have our data, it is time to make use of that data. In this section we will explore our data using the following steps;
+Now that we have our data, it is time to make use of that data. In this section, we will explore our data using plots and summaries.
 
 
 Suppose we believe that Los Angeles is the country with the most wins. We can investigate this idea using our data. Let us start with the franchise data table. We can see that the data involves a span of 100 years(1917 to 2017). Lets investigate whether the amount of games played every 50 years starting from year 1917 increased or decreased.
@@ -192,22 +192,20 @@ Suppose we believe that Los Angeles is the country with the most wins. We can in
 # We can access this data using our get_fran function
 fran <- get_fran(tab_name = "franchise")
 
-# Let us visualize the 
-
 # Now lets perform the necessary transformation and visualize the data
 teamData <- separate(fran,data.firstSeasonId,into=c("startYear","Quarter"),sep=4)
 teamData <- teamData %>% mutate(Year = "NA") 
 teamData$Year <- ifelse(teamData$startYear <= 1967, 1,0)
 teamData$Year <- as.factor(teamData$Year)
 g <- ggplot(teamData, aes(x = as.numeric(startYear)))
-g+geom_histogram(aes(fill = Year), position = "dodge") +xlab("Franchise Start Year") +scale_fill_discrete(labels = c("1968-2017", "1917-1967")) +labs(title = "Histogram of Start Year")
+g+geom_histogram(aes(fill = Year), position = "dodge") +xlab("Franchise Start Year") +scale_fill_discrete(labels = c("1968-2017", "1917-1967"))   +labs(title = "Histogram of Start Year")
 ```
 
-From the plot above, we see that more games were played during 1968 - 2017 and less games were played during 1917-1967.
+From the plot above, we see that more games were played during 1968 - 2017 and less games were played during 1917-1967. Now, lets investigate the relationship between year and number of games played.
 
 
 
-```{r}
+```{r, message=FALSE}
 
 #Join by franchiseId so that totalGames column is included
 d <- get_fran_tot(tab_name = "franchise-team-totals", ID=14)
